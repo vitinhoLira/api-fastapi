@@ -73,3 +73,5 @@ class ResultadoResponse(ResultadoBase):
 
     class Config:
         orm_mode = True
+
+        
