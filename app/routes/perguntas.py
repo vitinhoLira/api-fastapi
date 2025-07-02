@@ -9,7 +9,7 @@ router = APIRouter(
 )
 
 # 🔹 Criar uma nova pergunta
-@router.post("/", response_model=schemas.PerguntaOut)
+@router.post("/", response_model=schemas.PerguntaResponse)
 def criar_pergunta(pergunta: schemas.PerguntaCreate, db: Session = Depends(get_db)):
     # Verifica se o quizz existe
     quizz = db.query(models.Quizz).filter(models.Quizz.id == pergunta.quizz_id).first()
@@ -24,13 +24,13 @@ def criar_pergunta(pergunta: schemas.PerguntaCreate, db: Session = Depends(get_d
 
 
 # 🔹 Listar todas as perguntas
-@router.get("/", response_model=list[schemas.PerguntaOut])
+@router.get("/", response_model=list[schemas.PerguntaResponse])
 def listar_perguntas(db: Session = Depends(get_db)):
     return db.query(models.Pergunta).all()
 
 
 # 🔹 Buscar uma pergunta por ID
-@router.get("/{pergunta_id}", response_model=schemas.PerguntaOut)
+@router.get("/{pergunta_id}", response_model=schemas.PerguntaResponse)
 def buscar_pergunta(pergunta_id: int, db: Session = Depends(get_db)):
     pergunta = db.query(models.Pergunta).filter(models.Pergunta.id == pergunta_id).first()
     if not pergunta:
@@ -39,7 +39,7 @@ def buscar_pergunta(pergunta_id: int, db: Session = Depends(get_db)):
 
 
 # 🔹 Atualizar uma pergunta
-@router.put("/{pergunta_id}", response_model=schemas.PerguntaOut)
+@router.put("/{pergunta_id}", response_model=schemas.PerguntaResponse)
 def atualizar_pergunta(pergunta_id: int, dados: schemas.PerguntaCreate, db: Session = Depends(get_db)):
     pergunta = db.query(models.Pergunta).filter(models.Pergunta.id == pergunta_id).first()
     if not pergunta:

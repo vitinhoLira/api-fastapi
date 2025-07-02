@@ -9,7 +9,7 @@ router = APIRouter(
 )
 
 # 🔹 Criar novo resultado
-@router.post("/", response_model=schemas.ResultadoOut)
+@router.post("/", response_model=schemas.ResultadoResponse)
 def criar_resultado(resultado: schemas.ResultadoCreate, db: Session = Depends(get_db)):
     quizz = db.query(models.Quizz).filter(models.Quizz.id == resultado.quizz_id).first()
     if not quizz:
@@ -27,13 +27,13 @@ def criar_resultado(resultado: schemas.ResultadoCreate, db: Session = Depends(ge
 
 
 # 🔹 Listar todos os resultados
-@router.get("/", response_model=list[schemas.ResultadoOut])
+@router.get("/", response_model=list[schemas.ResultadoResponse])
 def listar_resultados(db: Session = Depends(get_db)):
     return db.query(models.Resultado).all()
 
 
 # 🔹 Buscar resultado por ID
-@router.get("/{resultado_id}", response_model=schemas.ResultadoOut)
+@router.get("/{resultado_id}", response_model=schemas.ResultadoResponse)
 def buscar_resultado(resultado_id: int, db: Session = Depends(get_db)):
     resultado = db.query(models.Resultado).filter(models.Resultado.id == resultado_id).first()
     if not resultado:
