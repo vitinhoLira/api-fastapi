@@ -12,10 +12,10 @@ class Usuario(Base):
     __tablename__ = "usuario"
 
     id = Column(Integer, primary_key=True, index=True)
-    nome = Column(String)
-    email = Column(String, unique=True, nullable=False, index=True)
+    nome = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False)
     senha = Column(String, nullable=False)
-    role = Column(Enum(RoleEnum), default=RoleEnum.usuario)
+    role = Column(Enum(RoleEnum), default=RoleEnum.usuario, nullable=False)
 
     resultados = relationship("Resultado", back_populates="usuario", cascade="all, delete", passive_deletes=True)
 

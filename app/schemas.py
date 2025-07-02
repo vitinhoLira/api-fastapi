@@ -1,26 +1,30 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional, List
-from enum import Enum
-
-# ======== ENUM para papel do usuário ==========
-class RoleEnum(str, Enum):
-    usuario = "usuario"
-    admin = "admin"
+from pydantic import BaseModel, ConfigDict, EmailStr
+from typing import Literal, Optional, List
+from app.models import RoleEnum
 
 # ========= USUÁRIO ==========
+# Login
+class LoginInput(BaseModel):
+    email: str
+    senha: str
+
+class TokenOut(BaseModel):
+    access_token: str
+    token_type: str
+
+# Usuário
 class UsuarioBase(BaseModel):
-    nome: Optional[str]
+    nome: str
     email: EmailStr
 
 class UsuarioCreate(UsuarioBase):
-    senha: str  # campo de entrada
+    senha: str
 
 class UsuarioResponse(UsuarioBase):
     id: int
     role: RoleEnum
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # ========= QUIZZ ==========
 class QuizzBase(BaseModel):
@@ -34,8 +38,7 @@ class QuizzCreate(QuizzBase):
 class QuizzResponse(QuizzBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # ========= PERGUNTA ==========
 class PerguntaBase(BaseModel):
@@ -53,8 +56,7 @@ class PerguntaResponse(PerguntaBase):
     id: int
     quizz_id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # ========= RESULTADO ==========
 class ResultadoBase(BaseModel):
@@ -71,7 +73,6 @@ class ResultadoResponse(ResultadoBase):
     quizz_id: int
     user_id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
         
