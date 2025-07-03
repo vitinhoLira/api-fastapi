@@ -6,6 +6,17 @@ from app.database import get_db
 
 router = APIRouter(prefix="/quizzes", tags=["Quizzes"])
 
+#Retornas todas as perguntas de um quizz
+@router.get("/{quizz_id}/perguntas", response_model=list[schemas.PerguntaResponse])
+def listar_perguntas_do_quizz(quizz_id: int, db: Session = Depends(get_db), usuario_logado: models.Usuario = Depends(get_usuario_logado)):
+    # Verifica se o quizz existe (opcional, mas boa prática)
+    quizz = db.query(models.Quizz).filter(models.Quizz.id == quizz_id).first()
+    if not quizz:
+        raise HTTPException(status_code=404, detail="Quiz não encontrado")
+
+    perguntas = db.query(models.Pergunta).filter(models.Pergunta.quizz_id == quizz_id).all()
+    return perguntas
+
 # Criar Quiz
 @router.post("/", response_model=schemas.QuizzResponse)
 def create_quizz(quizz: schemas.QuizzCreate, db: Session = Depends(get_db), usuario_logado: models.Usuario = Depends(so_admins)):

@@ -2,12 +2,23 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app import models, schemas
 from app.auth import auth
+from app.auth.dependencies import get_usuario_logado
 from app.database import get_db
 
 router = APIRouter(
     prefix="/usuarios",
     tags=["Usuários"]
 )
+
+@router.get("/{usuario_id}/resultados", response_model=list[schemas.ResultadoResponse])
+def listar_resultados_do_usuario(usuario_id: int, db: Session = Depends(get_db), usuario_logado: models.Usuario = Depends(get_usuario_logado)):
+    # Verifica se o usuário existe (opcional, mas recomendado)
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == usuario_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+
+    resultados = db.query(models.Resultado).filter(models.Resultado.user_id == usuario_id).all()
+    return resultados
 
 @router.post("/register", response_model=schemas.UsuarioResponse)
 def registrar(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
