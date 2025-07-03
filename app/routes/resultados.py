@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app import models, schemas
+from app.auth.dependencies import get_usuario_logado
 from app.database import get_db
 
 router = APIRouter(
@@ -10,7 +11,7 @@ router = APIRouter(
 
 # 🔹 Criar novo resultado
 @router.post("/", response_model=schemas.ResultadoResponse)
-def criar_resultado(resultado: schemas.ResultadoCreate, db: Session = Depends(get_db)):
+def criar_resultado(resultado: schemas.ResultadoCreate, db: Session = Depends(get_db), usuario_logado: models.Usuario = Depends(get_usuario_logado)):
     quizz = db.query(models.Quizz).filter(models.Quizz.id == resultado.quizz_id).first()
     if not quizz:
         raise HTTPException(status_code=404, detail="Quizz não encontrado")
@@ -28,13 +29,13 @@ def criar_resultado(resultado: schemas.ResultadoCreate, db: Session = Depends(ge
 
 # 🔹 Listar todos os resultados
 @router.get("/", response_model=list[schemas.ResultadoResponse])
-def listar_resultados(db: Session = Depends(get_db)):
+def listar_resultados(db: Session = Depends(get_db), usuario_logado: models.Usuario = Depends(get_usuario_logado)):
     return db.query(models.Resultado).all()
 
 
 # 🔹 Buscar resultado por ID
 @router.get("/{resultado_id}", response_model=schemas.ResultadoResponse)
-def buscar_resultado(resultado_id: int, db: Session = Depends(get_db)):
+def buscar_resultado(resultado_id: int, db: Session = Depends(get_db), usuario_logado: models.Usuario = Depends(get_usuario_logado)):
     resultado = db.query(models.Resultado).filter(models.Resultado.id == resultado_id).first()
     if not resultado:
         raise HTTPException(status_code=404, detail="Resultado não encontrado")
@@ -43,7 +44,7 @@ def buscar_resultado(resultado_id: int, db: Session = Depends(get_db)):
 
 # 🔹 Deletar resultado
 @router.delete("/{resultado_id}", status_code=status.HTTP_204_NO_CONTENT)
-def deletar_resultado(resultado_id: int, db: Session = Depends(get_db)):
+def deletar_resultado(resultado_id: int, db: Session = Depends(get_db), usuario_logado: models.Usuario = Depends(get_usuario_logado)):
     resultado = db.query(models.Resultado).filter(models.Resultado.id == resultado_id).first()
     if not resultado:
         raise HTTPException(status_code=404, detail="Resultado não encontrado")
