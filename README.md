@@ -19,23 +19,27 @@ API REST para criação e gerenciamento de quizzes, com autenticação JWT, cont
 
 ## 📂 Estrutura do Projeto
 
+```bash
 api-fastapi/
 ├── app/
-│ ├── main.py
-│ ├── models.py
-│ ├── database.py
-│ ├── auth/
-│ │ ├── auth.py
-│ │ └── dependencies.py
-│ ├── routes/
-│ │ ├── usuarios.py
-│ │ ├── quizzes.py
-│ │ ├── perguntas.py
-│ │ └── resultados.py
-│ └── schemas.py
+│   ├── main.py
+│   ├── models.py
+│   ├── database.py
+│   ├── auth/
+│   │   ├── auth.py
+│   │   └── dependencies.py
+│   ├── routes/
+│   │   ├── usuarios.py
+│   │   ├── quizzes.py
+│   │   ├── perguntas.py
+│   │   └── resultados.py
+│   └── schemas.py
 ├── .env
 ├── requirements.txt
 └── README.md
+```
+
+---
 
 
 ---
