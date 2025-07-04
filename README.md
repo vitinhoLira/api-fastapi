@@ -15,7 +15,6 @@ API REST para criação e gerenciamento de quizzes, com autenticação JWT, cont
 - [Passlib (bcrypt)](https://passlib.readthedocs.io/)
 - [JWT - PyJWT](https://pyjwt.readthedocs.io/)
 
----
 
 ## 📂 Estrutura do Projeto
 
